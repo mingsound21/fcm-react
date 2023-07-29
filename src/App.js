@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import firebase from 'firebase'; //firebase모듈을 import해줘야 합니다.
+
+
+//** 여기 config 추가 **//
+
+
+firebase.initializeApp(config);
+const messaging = firebase.messaging();
+
+messaging
+  .requestPermission()
+  .then(() => {
+    console.log("허가");
+    return messaging.getToken(); //등록 토큰 받기
+  })
+  .then(function (token) {
+    console.log(token); //토큰 출력
+  })
+  .catch(function (error) {
+    console.log("FCM Error : ", error);
+  });
+
+  messaging.onMessage((payload) => {
+  console.log(payload.notification.title);
+  console.log(payload.notification.body);
+});
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>FCM TEST</h1>
     </div>
   );
 }
